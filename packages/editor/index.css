@@ -94,6 +94,14 @@ pre code.hljs .hljs-code {
   margin: 0 -2px;
 }
 
+.annotation-highlight.math-inline-annotation {
+  display: inline-block;
+}
+
+.annotation-highlight.math-block-annotation {
+  display: block;
+}
+
 .annotation-highlight.deletion {
   background: oklch(from var(--destructive) l c h / 0.35);
   text-decoration: line-through;
