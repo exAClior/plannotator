@@ -896,7 +896,10 @@ const App: React.FC = () => {
 
   const buildMessageAnnotationEntries = React.useCallback((): MessageAnnotationEntry[] => {
     if (annotateSource !== 'message' || recentMessages.length === 0) return [];
-    const states = saveCurrentMessageState();
+    // This function is used while rendering to build the agent-terminal feedback
+    // preview. It must stay pure; persisting here would set state during render
+    // and React would correctly explode with "too many re-renders".
+    const states = getMessageStatesWithCurrent();
     return recentMessages.map((msg) => {
       const state = states.get(msg.messageId) ?? createEmptyMessageState(msg);
       const linkedDocs: Map<string, LinkedDocAnnotationEntry> = new Map();
@@ -917,7 +920,7 @@ const App: React.FC = () => {
         codeAnnotations: state.codeAnnotations,
       };
     });
-  }, [annotateSource, recentMessages, saveCurrentMessageState]);
+  }, [annotateSource, recentMessages, getMessageStatesWithCurrent]);
 
   const activeMessageAnnotationCounts = React.useMemo(() => {
     const counts = new Map(cachedMessageAnnotationCounts);
